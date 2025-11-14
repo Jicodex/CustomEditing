@@ -1,0 +1,2696 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CustomEditing</title>
+    <!-- ========== All Css Link  -->
+
+    <script src="assets/js/tailwindcss.17"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/style.css" />
+  </head>
+  <body class="bg-black">
+    <div
+      class="relative min-h-screen w-full flex flex-col items-center justify-center p-6"
+    >
+      <div class="absolute inset-0 z-0 overflow-hidden">
+        <div
+          class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[60vh] w-[70vw] max-w-5xl rounded-full bg-cyan-500/10 blur-3xl animate-subtle-halo-pulse"
+        ></div>
+        <div
+          class="absolute top-0 h-full w-[2px] bg-cyan-400 shadow-[0_0_15px_2px_theme(colors.cyan.400)] left-[var(--playhead-position)]"
+        ></div>
+        <div class="absolute inset-0 w-full h-full animate-slide-clips">
+          <div class="absolute w-[200%] h-full flex items-center">
+            <div
+              class="absolute w-[18%] h-12 bg-white/5 backdrop-blur-sm rounded-lg top-[48%] left-[5%] shadow-[inset_0_0_10px_rgba(0,255,255,0.2)]"
+            ></div>
+            <div
+              class="absolute w-[25%] h-20 bg-white/5 backdrop-blur-sm rounded-lg top-[55%] left-[25%] shadow-[inset_0_0_10px_rgba(0,255,255,0.2)]"
+            ></div>
+            <div
+              class="absolute w-[15%] h-16 bg-white/5 backdrop-blur-sm rounded-lg top-[50%] left-[55%] shadow-[inset_0_0_10px_rgba(0,255,255,0.2)]"
+            ></div>
+            <div
+              class="absolute w-[22%] h-12 bg-white/5 backdrop-blur-sm rounded-lg top-[53%] left-[72%] shadow-[inset_0_0_10px_rgba(0,255,255,0.2)]"
+            ></div>
+          </div>
+        </div>
+      </div>
+      <header class="absolute top-0 left-0 w-full z-[99999999] bg-transparent">
+        <div class="flex items-center justify-between p-6 md:p-8 relative">
+          <!-- Logo -->
+          <h2 class="text-lg font-medium tracking-wide text-white/90">
+            CustomEditing.com
+          </h2>
+
+          <!-- Desktop Navigation -->
+          <nav class="hidden md:flex items-center gap-6 md:gap-8 text-sm">
+            <a
+              class="text-white/70 transition-colors hover:text-white"
+              href="https://app.customediting.com/"
+              >Log In</a
+            >
+            <a
+              href="#pricing_section"
+              class="flex h-9 items-center justify-center rounded-md border border-white/20 bg-white/10 px-4 font-bold tracking-widest text-white transition-all duration-300 hover:border-cyan-400 hover:bg-cyan-400/20"
+            >
+              Sign Up
+            </a>
+          </nav>
+
+          <!-- Mobile Hamburger -->
+          <button
+            id="mobile-menu-button"
+            class="md:hidden flex items-center justify-center p-2 text-white/70 hover:text-white z-[99999999] relative"
+          >
+            <svg
+              id="menu-open"
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 8h16M4 16h16"
+              ></path>
+            </svg>
+            <svg
+              id="menu-close"
+              class="w-6 h-6 hidden"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Mobile Drawer + Overlay -->
+        <div id="mobile-menu" class="fixed inset-0 z-[99999998] hidden">
+          <!-- Overlay -->
+          <div
+            id="mobile-menu-overlay"
+            class="absolute inset-0 bg-black/70 backdrop-blur-sm opacity-0 transition-opacity duration-300"
+          ></div>
+
+          <!-- Drawer -->
+          <div
+            id="drawer"
+            class="ml-auto w-64 h-50 bg-gray-900 p-6 transform translate-x-full transition-transform duration-300 flex flex-col gap-6"
+          >
+            <a
+              class="text-white text-lg font-medium hover:text-cyan-400"
+              href="https://app.customediting.com/"
+              >Log In</a
+            >
+            <a
+              href="#pricing_section"
+              class="mt-auto flex h-10 items-center justify-center rounded-md border border-white/20 bg-white/10 px-4 font-bold tracking-widest text-white transition-all duration-300 hover:border-cyan-400 hover:bg-cyan-400/20"
+            >
+              Sign Up
+            </a>
+          </div>
+        </div>
+      </header>
+
+      <script>
+        const menuButton = document.getElementById("mobile-menu-button");
+        const mobileMenu = document.getElementById("mobile-menu");
+        const drawer = document.getElementById("drawer");
+        const overlay = document.getElementById("mobile-menu-overlay");
+        const menuOpenIcon = document.getElementById("menu-open");
+        const menuCloseIcon = document.getElementById("menu-close");
+
+        function openMenu() {
+          mobileMenu.classList.remove("hidden");
+          setTimeout(() => {
+            overlay.classList.remove("opacity-0");
+            overlay.classList.add("opacity-100");
+            drawer.classList.remove("translate-x-full");
+          }, 10); // allow DOM to render
+          menuOpenIcon.classList.add("hidden");
+          menuCloseIcon.classList.remove("hidden");
+        }
+
+        function closeMenu() {
+          overlay.classList.remove("opacity-100");
+          overlay.classList.add("opacity-0");
+          drawer.classList.add("translate-x-full");
+          menuOpenIcon.classList.remove("hidden");
+          menuCloseIcon.classList.add("hidden");
+          // hide menu after transition
+          setTimeout(() => mobileMenu.classList.add("hidden"), 300);
+        }
+
+        menuButton.addEventListener("click", () => {
+          if (mobileMenu.classList.contains("hidden")) openMenu();
+          else closeMenu();
+        });
+
+        overlay.addEventListener("click", closeMenu);
+      </script>
+
+      <main
+        class="relative z-10 flex flex-1 flex-col items-center justify-center text-center banner_section_start"
+      >
+        <div
+          class="relative flex flex-col items-center gap-6 p-8 md:p-12 bg-black/30 backdrop-blur-md rounded-2xl border border-white/10 shadow-2xl shadow-black/50 overflow-hidden animate-light-sweep banner_content"
+        >
+          <h1
+            class="text-4xl font-black leading-tight tracking-tight text-white md:text-6xl fade-in"
+          >
+            You Film. We Edit. No Chaos.
+          </h1>
+          <div
+            class="w-full max-w-lg h-10 my-2 flex items-center justify-center gap-px animate-waveform-pulse fade-in fade-in-delay-1"
+          >
+            <div
+              class="w-px bg-cyan-400/70 rounded-full"
+              style="height: 20%"
+            ></div>
+            <div
+              class="w-px bg-cyan-400/70 rounded-full"
+              style="height: 30%"
+            ></div>
+            <div
+              class="w-px bg-cyan-400/70 rounded-full"
+              style="height: 50%"
+            ></div>
+            <div
+              class="w-px bg-cyan-400/70 rounded-full"
+              style="height: 40%"
+            ></div>
+            <div
+              class="w-px bg-cyan-400/70 rounded-full"
+              style="height: 70%"
+            ></div>
+            <div
+              class="w-px bg-cyan-400/70 rounded-full"
+              style="height: 60%"
+            ></div>
+            <div
+              class="w-px bg-cyan-400/70 rounded-full"
+              style="height: 80%"
+            ></div>
+            <div
+              class="w-px bg-cyan-400/70 rounded-full"
+              style="height: 55%"
+            ></div>
+            <div
+              class="w-px bg-cyan-400/70 rounded-full"
+              style="height: 35%"
+            ></div>
+            <div
+              class="w-px bg-cyan-400/70 rounded-full"
+              style="height: 25%"
+            ></div>
+            <div
+              class="w-px bg-cyan-400/70 rounded-full"
+              style="height: 45%"
+            ></div>
+            <div
+              class="w-px bg-cyan-400/70 rounded-full"
+              style="height: 65%"
+            ></div>
+            <div
+              class="w-px bg-cyan-400/70 rounded-full"
+              style="height: 90%"
+            ></div>
+            <div
+              class="w-px bg-cyan-400/70 rounded-full"
+              style="height: 100%"
+            ></div>
+            <div
+              class="w-px bg-cyan-400/70 rounded-full"
+              style="height: 75%"
+            ></div>
+            <div
+              class="w-px bg-cyan-400/70 rounded-full"
+              style="height: 50%"
+            ></div>
+            <div
+              class="w-px bg-cyan-400/70 rounded-full"
+              style="height: 40%"
+            ></div>
+            <div
+              class="w-px bg-cyan-400/70 rounded-full"
+              style="height: 60%"
+            ></div>
+            <div
+              class="w-px bg-cyan-400/70 rounded-full"
+              style="height: 85%"
+            ></div>
+            <div
+              class="w-px bg-cyan-400/70 rounded-full"
+              style="height: 70%"
+            ></div>
+            <div
+              class="w-px bg-cyan-400/70 rounded-full"
+              style="height: 50%"
+            ></div>
+            <div
+              class="w-px bg-cyan-400/70 rounded-full"
+              style="height: 30%"
+            ></div>
+            <div
+              class="w-px bg-cyan-400/70 rounded-full"
+              style="height: 20%"
+            ></div>
+            <div
+              class="w-px bg-cyan-400/70 rounded-full"
+              style="height: 40%"
+            ></div>
+            <div
+              class="w-px bg-cyan-400/70 rounded-full"
+              style="height: 55%"
+            ></div>
+            <div
+              class="w-px bg-cyan-400/70 rounded-full"
+              style="height: 75%"
+            ></div>
+            <div
+              class="w-px bg-cyan-400/70 rounded-full"
+              style="height: 65%"
+            ></div>
+            <div
+              class="w-px bg-cyan-400/70 rounded-full"
+              style="height: 45%"
+            ></div>
+          </div>
+          <p
+            class="mx-auto max-w-2xl text-base font-normal leading-relaxed text-neutral-300 md:text-lg fade-in fade-in-delay-2"
+          >
+            A dedicated YouTube editing team engineered for creators who want
+            consistent, professional videos — every single month.
+          </p>
+          <div
+            class="mt-6 flex flex-col w-full items-center justify-center gap-4 sm:w-auto sm:flex-row fade-in fade-in-delay-3"
+            style="z-index: 999999"
+          >
+            <a
+              href="#pricing_section"
+              class="flex h-12 w-full sm:w-auto cursor-pointer items-center justify-center gap-2 rounded-lg bg-cyan-400 px-8 text-sm font-bold uppercase tracking-widest text-black shadow-[0_0_20px_theme(colors.cyan.400/0.4)] transition-all duration-300 hover:bg-white hover:shadow-[0_0_30px_theme(colors.white/0.6)]"
+            >
+              LET’S GO!
+            </a>
+            <a
+              href="https://app.customediting.com/"
+              class="group flex h-12 w-full sm:w-auto cursor-pointer items-center justify-center gap-2 rounded-lg border border-white/20 bg-transparent px-8 text-sm font-bold uppercase tracking-widest text-white/70 transition-all duration-300 hover:border-cyan-400 hover:text-white"
+            >
+              <span>LOG IN</span>
+              <span
+                class="transition-transform duration-300 group-hover:translate-x-1"
+                >→</span
+              >
+            </a>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <div
+      class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden"
+      id="how_to"
+    >
+      <div class="layout-container flex h-full grow flex-col">
+        <div
+          class="px-4 md:px-10 lg:px-20 xl:px-40 flex flex-1 justify-center py-5"
+        >
+          <div
+            class="layout-content-container flex flex-col max-w-screen-xl flex-1 w-full"
+          >
+            <main
+              class="flex flex-col items-center justify-center flex-grow gap-16 px-4 py-20"
+            >
+              <div
+                class="text-center max-w-3xl mx-auto flex flex-col gap-4 mb-4"
+              >
+                <h1
+                  class="text-4xl md:text-5xl font-bold text-white tracking-tight"
+                >
+                  How It Works
+                </h1>
+                <p class="text-base md:text-lg text-gray-400">
+                  A streamlined, end-to-end editing workflow built for creators
+                  who value speed, precision, and total control.
+                </p>
+              </div>
+              <div
+                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full max-w-7xl"
+              >
+                <div
+                  class="relative flex flex-col gap-6 rounded-xl p-8 text-center items-center glass-panel overflow-hidden fade-in card-1"
+                >
+                  <div class="highlight"></div>
+                  <span
+                    class="material-symbols-outlined text-neon-cyan animate-pulse-icon"
+                    >videocam</span
+                  >
+                  <div class="flex flex-col gap-2 z-10">
+                    <p
+                      class="text-neon-cyan/80 text-xs font-medium tracking-wider uppercase"
+                    >
+                      Step 1
+                    </p>
+                    <h3
+                      class="text-white text-lg font-bold leading-tight uppercase tracking-widest"
+                    >
+                      Film Your Video
+                    </h3>
+                    <p class="text-gray-400 text-sm font-medium leading-normal">
+                      Record your content. We handle the rest.
+                    </p>
+                  </div>
+                </div>
+                <div
+                  class="relative flex flex-col gap-6 rounded-xl p-8 text-center items-center glass-panel overflow-hidden fade-in card-2"
+                >
+                  <div class="highlight"></div>
+                  <span
+                    class="material-symbols-outlined text-neon-cyan animate-pulse-icon"
+                    style="animation-delay: 2s"
+                    >upload</span
+                  >
+                  <div class="flex flex-col gap-2 z-10">
+                    <p
+                      class="text-neon-cyan/80 text-xs font-medium tracking-wider uppercase"
+                    >
+                      Step 2
+                    </p>
+                    <h3
+                      class="text-white text-lg font-bold leading-tight uppercase tracking-widest"
+                    >
+                      Submit a Request
+                    </h3>
+                    <p class="text-gray-400 text-sm font-medium leading-normal">
+                      Upload files and add your edit notes.
+                    </p>
+                  </div>
+                </div>
+                <div
+                  class="relative flex flex-col gap-6 rounded-xl p-8 text-center items-center glass-panel overflow-hidden fade-in card-3"
+                >
+                  <div class="highlight"></div>
+                  <span
+                    class="material-symbols-outlined text-neon-cyan animate-pulse-icon"
+                    style="animation-delay: 4s"
+                    >auto_fix</span
+                  >
+                  <div class="flex flex-col gap-2 z-10">
+                    <p
+                      class="text-neon-cyan/80 text-xs font-medium tracking-wider uppercase"
+                    >
+                      Step 3
+                    </p>
+                    <h3
+                      class="text-white text-lg font-bold leading-tight uppercase tracking-widest"
+                    >
+                      We Edit
+                    </h3>
+                    <p class="text-gray-400 text-sm font-medium leading-normal">
+                      Our experts get to work on your vision.
+                    </p>
+                  </div>
+                </div>
+                <div
+                  class="relative flex flex-col gap-6 rounded-xl p-8 text-center items-center glass-panel overflow-hidden fade-in card-4"
+                >
+                  <div class="highlight"></div>
+                  <span
+                    class="material-symbols-outlined text-neon-cyan animate-pulse-icon"
+                    style="animation-delay: 6s"
+                    >thumb_up</span
+                  >
+                  <div class="flex flex-col gap-2 z-10">
+                    <p
+                      class="text-neon-cyan/80 text-xs font-medium tracking-wider uppercase"
+                    >
+                      Step 4
+                    </p>
+                    <h3
+                      class="text-white text-lg font-bold leading-tight uppercase tracking-widest"
+                    >
+                      Review &amp; Approve
+                    </h3>
+                    <p class="text-gray-400 text-sm font-medium leading-normal">
+                      Get your video back, ready to publish.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <p
+                class="text-gray-400 text-base font-medium leading-relaxed px-4 text-center max-w-2xl mt-4"
+              >
+                One active edit at a time. Fast turnaround. Sequential editing
+                ensures your project gets complete focus — no multitasking, no
+                delays, no missed uploads.
+              </p>
+            </main>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <main
+      class="relative flex min-h-screen w-full flex-col overflow-hidden"
+      id="main-container"
+    >
+      <div
+        class="relative z-10 grid w-full flex-grow grid-cols-1 md:grid-cols-2"
+      >
+        <div
+          class="relative flex flex-col justify-center p-8 md:p-12 lg:p-20 bg-graphite/30 backdrop-blur-lg border-r border-white/5"
+        >
+          <div class="flex w-full max-w-lg flex-col gap-10">
+            <div class="flex flex-col gap-5">
+              <h1
+                class="font-display text-4xl font-extrabold uppercase tracking-tighter-2 text-white lg:text-5xl fade-in"
+                style="animation-delay: 100ms"
+              >
+                FAST.<br />PRECISE.<br />DONE RIGHT.
+              </h1>
+              <p
+                class="font-body text-lg font-bold text-gray-300 lg:text-xl fade-in"
+                style="animation-delay: 200ms"
+              >
+                Real editors. Real systems. No waiting. No guesswork. Just
+                clean, consistent delivery that keeps your channel in motion.
+              </p>
+            </div>
+            <ul class="flex flex-col gap-6 text-base font-medium">
+              <li
+                class="flex items-start gap-3 fade-in"
+                style="animation-delay: 400ms"
+              >
+                <span class="text-neon-cyan/80 mt-1">▸</span>
+                <div>
+                  <strong>Your Brand, Every Cut.</strong>
+                  <span class="block text-gray-400"
+                    >Your Design Profile keeps every color, font, and graphic
+                    locked to your brand — automatically.</span
+                  >
+                </div>
+              </li>
+              <li
+                class="flex items-start gap-3 fade-in"
+                style="animation-delay: 500ms"
+              >
+                <span class="text-neon-cyan/80 mt-1">▸</span>
+                <div>
+                  <strong>Predictable Turnaround.</strong>
+                  <span class="block text-gray-400"
+                    >We edit one project at a time. That’s not a bottleneck —
+                    it’s focus. It means your video gets our full attention,
+                    moves faster, and lands polished every time.</span
+                  >
+                </div>
+              </li>
+              <li
+                class="flex items-start gap-3 fade-in"
+                style="animation-delay: 600ms"
+              >
+                <span class="text-neon-cyan/80 mt-1">▸</span>
+                <div>
+                  <strong>Human Taste + Machine Discipline.</strong>
+                  <span class="block text-gray-400"
+                    >Trained editors powered by structure, precision, and zero
+                    creative waste.</span
+                  >
+                </div>
+              </li>
+              <li
+                class="flex items-start gap-3 fade-in"
+                style="animation-delay: 700ms"
+              >
+                <span class="text-neon-cyan/80 mt-1">▸</span>
+                <div>
+                  <strong>Feedback That Works.</strong>
+                  <span class="block text-gray-400"
+                    >Clear notes. Fast fixes. No chaos. You say it once — it
+                    gets done.</span
+                  >
+                </div>
+              </li>
+              <li
+                class="flex items-start gap-3 fade-in"
+                style="animation-delay: 800ms"
+              >
+                <span class="text-neon-cyan/80 mt-1">▸</span>
+                <div>
+                  <strong>Built by Creators.</strong>
+                  <span class="block text-gray-400"
+                    >From the same system that scaled billion-view channels.
+                    This isn’t theory — it’s proof.</span
+                  >
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="right-pane relative hidden md:block">
+          <div class="timeline-container group">
+            <div
+              class="absolute top-0 left-0 right-0 h-8 bg-black/20 z-10 border-b border-white/10 flex items-center pr-4 justify-end"
+            >
+              <div class="absolute inset-0 overflow-hidden">
+                <div class="timeline-loop">
+                  <div
+                    class="flex w-1/2 shrink-0 items-center justify-between px-4 text-xs text-[var(--text-muted)] opacity-70"
+                  >
+                    <div class="w-px h-1.5 bg-current"></div>
+                    <span>0:15</span>
+                    <div class="w-px h-1.5 bg-current"></div>
+                    <div class="w-px h-1.5 bg-current"></div>
+                    <span>0:30</span>
+                    <div class="w-px h-1.5 bg-current"></div>
+                    <div class="w-px h-1.5 bg-current"></div>
+                    <span>0:45</span>
+                    <div class="w-px h-1.5 bg-current"></div>
+                    <div class="w-px h-1.5 bg-current"></div>
+                    <span>1:00</span>
+                    <div class="w-px h-1.5 bg-current"></div>
+                  </div>
+                  <div
+                    class="flex w-1/2 shrink-0 items-center justify-between px-4 text-xs text-[var(--text-muted)] opacity-70"
+                  >
+                    <div class="w-px h-1.5 bg-current"></div>
+                    <span>1:15</span>
+                    <div class="w-px h-1.5 bg-current"></div>
+                    <div class="w-px h-1.5 bg-current"></div>
+                    <span>1:30</span>
+                    <div class="w-px h-1.5 bg-current"></div>
+                    <div class="w-px h-1.5 bg-current"></div>
+                    <span>1:45</span>
+                    <div class="w-px h-1.5 bg-current"></div>
+                    <div class="w-px h-1.5 bg-current"></div>
+                    <span>2:00</span>
+                    <div class="w-px h-1.5 bg-current"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-center gap-2 z-20">
+                <div
+                  class="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse"
+                ></div>
+              </div>
+            </div>
+            <div class="absolute inset-0 top-8 overflow-hidden">
+              <div
+                class="absolute inset-0 flex flex-col justify-center gap-2 p-8"
+              >
+                <div class="h-4 relative">
+                  <div class="timeline-loop t-track">
+                    <div class="flex w-1/2 shrink-0 items-center px-2 gap-8">
+                      <div class="h-2 rounded w-[20%] title-bar"></div>
+                      <div
+                        class="h-2 rounded w-[35%] title-bar"
+                        style="animation-delay: -1.2s"
+                      ></div>
+                      <div
+                        class="h-2 rounded w-[15%] title-bar"
+                        style="animation-delay: -0.5s"
+                      ></div>
+                    </div>
+                    <div class="flex w-1/2 shrink-0 items-center px-2 gap-8">
+                      <div class="h-2 rounded w-[20%] title-bar"></div>
+                      <div
+                        class="h-2 rounded w-[35%] title-bar"
+                        style="animation-delay: -1.2s"
+                      ></div>
+                      <div
+                        class="h-2 rounded w-[15%] title-bar"
+                        style="animation-delay: -0.5s"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="h-24 relative">
+                  <div class="timeline-loop v-track">
+                    <div class="w-1/2 shrink-0 flex items-center gap-2 px-2">
+                      <div
+                        class="video-clip h-full w-[25%] rounded-md bg-white/5 playhead-glow"
+                        style="--delay: -2s"
+                      >
+                        <div
+                          class="transition-flash"
+                          style="--count: 3; animation-delay: calc(15s / 3 * 0)"
+                        ></div>
+                      </div>
+                      <div
+                        class="video-clip h-full w-[40%] rounded-md bg-white/5 playhead-glow"
+                        style="--delay: 0s"
+                      >
+                        <div
+                          class="transition-flash"
+                          style="--count: 3; animation-delay: calc(15s / 3 * 1)"
+                        ></div>
+                      </div>
+                      <div
+                        class="video-clip h-full w-[30%] rounded-md bg-white/5 playhead-glow"
+                        style="--delay: -4s"
+                      >
+                        <div
+                          class="transition-flash"
+                          style="--count: 3; animation-delay: calc(15s / 3 * 2)"
+                        ></div>
+                      </div>
+                    </div>
+                    <div class="w-1/2 shrink-0 flex items-center gap-2 px-2">
+                      <div
+                        class="video-clip h-full w-[25%] rounded-md bg-white/5 playhead-glow"
+                        style="--delay: -2s"
+                      >
+                        <div
+                          class="transition-flash"
+                          style="--count: 3; animation-delay: calc(15s / 3 * 0)"
+                        ></div>
+                      </div>
+                      <div
+                        class="video-clip h-full w-[40%] rounded-md bg-white/5 playhead-glow"
+                        style="--delay: 0s"
+                      >
+                        <div
+                          class="transition-flash"
+                          style="--count: 3; animation-delay: calc(15s / 3 * 1)"
+                        ></div>
+                      </div>
+                      <div
+                        class="video-clip h-full w-[30%] rounded-md bg-white/5 playhead-glow"
+                        style="--delay: -4s"
+                      >
+                        <div
+                          class="transition-flash"
+                          style="--count: 3; animation-delay: calc(15s / 3 * 2)"
+                        ></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="h-24 relative">
+                  <div class="timeline-loop v-track">
+                    <div class="w-1/2 shrink-0 flex items-center gap-2 px-2">
+                      <div
+                        class="video-clip h-full w-[50%] rounded-md bg-white/5 playhead-glow"
+                        style="--delay: -1s"
+                      >
+                        <div
+                          class="transition-flash"
+                          style="--count: 2; animation-delay: calc(15s / 2 * 0)"
+                        ></div>
+                      </div>
+                      <div
+                        class="video-clip h-full w-[45%] rounded-md bg-white/5 playhead-glow"
+                        style="--delay: -3.5s"
+                      >
+                        <div
+                          class="transition-flash"
+                          style="--count: 2; animation-delay: calc(15s / 2 * 1)"
+                        ></div>
+                      </div>
+                    </div>
+                    <div class="w-1/2 shrink-0 flex items-center gap-2 px-2">
+                      <div
+                        class="video-clip h-full w-[50%] rounded-md bg-white/5 playhead-glow"
+                        style="--delay: -1s"
+                      >
+                        <div
+                          class="transition-flash"
+                          style="--count: 2; animation-delay: calc(15s / 2 * 0)"
+                        ></div>
+                      </div>
+                      <div
+                        class="video-clip h-full w-[45%] rounded-md bg-white/5 playhead-glow"
+                        style="--delay: -3.5s"
+                      >
+                        <div
+                          class="transition-flash"
+                          style="--count: 2; animation-delay: calc(15s / 2 * 1)"
+                        ></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="h-16 relative">
+                  <div class="timeline-loop a-track">
+                    <div class="w-1/2 shrink-0 flex items-center px-2">
+                      <div class="w-full h-full audio-track">
+                        <div class="waveform">
+                          <div
+                            class="waveform-pulse"
+                            style="animation-delay: -1.5s"
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="w-1/2 shrink-0 flex items-center px-2">
+                      <div class="w-full h-full audio-track">
+                        <div class="waveform">
+                          <div
+                            class="waveform-pulse"
+                            style="animation-delay: -1.5s"
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="h-16 relative">
+                  <div class="timeline-loop a-track">
+                    <div class="w-1/2 shrink-0 flex items-center px-2">
+                      <div class="w-[80%] ml-[10%] h-full audio-track">
+                        <div class="waveform">
+                          <div class="waveform-pulse"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="w-1/2 shrink-0 flex items-center px-2">
+                      <div class="w-[80%] ml-[10%] h-full audio-track">
+                        <div class="waveform">
+                          <div class="waveform-pulse"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="playhead"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div
+      class="relative flex h-auto min-h-screen w-full flex-col bg-gradient-to-br from-graphite to-background-dark group/design-root overflow-hidden"
+    >
+      <div class="absolute inset-0 z-0">
+        <div
+          class="absolute -inset-1/4 w-[150%] h-[150%] bg-radial-gradient from-transparent via-transparent to-cyan-accent/10 blur-3xl animate-network-glow"
+        ></div>
+        <div
+          class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/grain.png')] opacity-5 animate-particle-drift"
+        ></div>
+        <svg
+          class="absolute inset-0 w-full h-full opacity-5"
+          height="100%"
+          width="100%"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs>
+            <pattern
+              height="80"
+              id="grid"
+              patternUnits="userSpaceOnUse"
+              width="80"
+            >
+              <path
+                d="M 80 0 L 0 0 0 80"
+                fill="none"
+                stroke="rgba(0, 255, 255, 0.2)"
+                stroke-width="0.5"
+              ></path>
+            </pattern>
+          </defs>
+          <rect fill="url(#grid)" height="100%" width="100%"></rect>
+          <path
+            class="animate-subtle-circuit"
+            d="M-200 200 l200 -200 h200 v200 l-200 200 M400 400 l-200 -200 v-200 h200 M 800 0 l-200 200"
+            fill="none"
+            stroke="rgba(0, 255, 255, 0.2)"
+            stroke-width="0.5"
+            style="stroke-dasharray: 2000; stroke-dashoffset: 2000"
+          ></path>
+        </svg>
+      </div>
+      <div class="layout-container flex h-full grow flex-col">
+        <main
+          class="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 py-24 mt-16 relative z-10 koski"
+        >
+          <div
+            class="w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16 lg:gap-24"
+          >
+            <div
+              class="lg:w-1/2 w-full h-[600px] flex items-center justify-center relative group [perspective:1000px]"
+            >
+              <svg
+                class="absolute inset-0 w-full h-full opacity-60"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 500 500"
+              >
+                <defs>
+                  <filter id="glow-line">
+                    <feGaussianBlur
+                      result="coloredBlur"
+                      stdDeviation="1.5"
+                    ></feGaussianBlur>
+                    <feMerge>
+                      <feMergeNode in="coloredBlur"></feMergeNode>
+                      <feMergeNode in="SourceGraphic"></feMergeNode>
+                    </feMerge>
+                  </filter>
+                </defs>
+                <path
+                  class="animate-pulse-line-1"
+                  d="M 250 250 L 100 100"
+                  fill="none"
+                  filter="url(#glow-line)"
+                  stroke="#00FFFF"
+                  stroke-width="1"
+                  style="stroke-dasharray: 1000; stroke-dashoffset: 1000"
+                ></path>
+                <path
+                  class="animate-pulse-line-2"
+                  d="M 250 250 L 400 100"
+                  fill="none"
+                  filter="url(#glow-line)"
+                  stroke="#00FFFF"
+                  stroke-width="1"
+                  style="stroke-dasharray: 1000; stroke-dashoffset: 1000"
+                ></path>
+                <path
+                  class="animate-pulse-line-3"
+                  d="M 250 250 L 450 250"
+                  fill="none"
+                  filter="url(#glow-line)"
+                  stroke="#00FFFF"
+                  stroke-width="1"
+                  style="stroke-dasharray: 1000; stroke-dashoffset: 1000"
+                ></path>
+                <path
+                  class="animate-pulse-line-4"
+                  d="M 250 250 L 400 400"
+                  fill="none"
+                  filter="url(#glow-line)"
+                  stroke="#00FFFF"
+                  stroke-width="1"
+                  style="stroke-dasharray: 1000; stroke-dashoffset: 1000"
+                ></path>
+                <path
+                  class="animate-pulse-line-5"
+                  d="M 250 250 L 100 400"
+                  fill="none"
+                  filter="url(#glow-line)"
+                  stroke="#835EFF"
+                  stroke-width="1"
+                  style="stroke-dasharray: 1000; stroke-dashoffset: 1000"
+                ></path>
+              </svg>
+              <div
+                class="w-40 h-40 rounded-full bg-cyan-accent/5 border border-cyan-accent/20 flex items-center justify-center text-center animate-pulse-slow transition-all duration-500 group-hover:scale-105 backdrop-blur-sm [transform-style:preserve-3d] group-hover:[transform:rotateY(10deg)_rotateX(-5deg)]"
+              >
+                <div class="text-cyan-accent font-bold text-glow-cyan">
+                  <div>Brand Engine</div>
+                  <div class="text-sm">Active</div>
+                </div>
+              </div>
+              <div
+                class="absolute w-full h-full animate-float transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:translateZ(20px)]"
+                style="animation-delay: -3s"
+              >
+                <div class="absolute top-[12%] left-[12%]">
+                  <div
+                    class="w-32 h-20 bg-black/30 backdrop-blur-md border border-white/10 rounded-lg p-2 flex items-center justify-center text-center text-sm font-medium transition-all duration-300 hover:border-cyan-accent/80 hover:scale-110 hover:shadow-cyan-accent/20 hover:shadow-lg"
+                  >
+                    Fonts
+                  </div>
+                </div>
+              </div>
+              <div
+                class="absolute w-full h-full animate-float transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:translateZ(30px)]"
+                style="animation-delay: 0s"
+              >
+                <div class="absolute top-[12%] right-[12%]">
+                  <div
+                    class="w-32 h-20 bg-black/30 backdrop-blur-md border border-white/10 rounded-lg p-2 flex items-center justify-center text-center text-sm font-medium transition-all duration-300 hover:border-cyan-accent/80 hover:scale-110 hover:shadow-cyan-accent/20 hover:shadow-lg"
+                  >
+                    Colors
+                  </div>
+                </div>
+              </div>
+              <div
+                class="absolute w-full h-full animate-float transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:translateZ(40px)]"
+                style="animation-delay: -6s"
+              >
+                <div class="absolute top-1/2 right-0 -translate-y-1/2">
+                  <div
+                    class="w-32 h-20 bg-black/30 backdrop-blur-md border border-white/10 rounded-lg p-2 flex items-center justify-center text-center text-sm font-medium transition-all duration-300 hover:border-cyan-accent/80 hover:scale-110 hover:shadow-cyan-accent/20 hover:shadow-lg"
+                  >
+                    Motion
+                  </div>
+                </div>
+              </div>
+              <div
+                class="absolute w-full h-full animate-float transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:translateZ(30px)]"
+                style="animation-delay: -9s"
+              >
+                <div class="absolute bottom-[12%] right-[12%]">
+                  <div
+                    class="w-32 h-20 bg-black/30 backdrop-blur-md border border-white/10 rounded-lg p-2 flex items-center justify-center text-center text-sm font-medium transition-all duration-300 hover:border-cyan-accent/80 hover:scale-110 hover:shadow-cyan-accent/20 hover:shadow-lg"
+                  >
+                    Audio
+                  </div>
+                </div>
+              </div>
+              <div
+                class="absolute w-full h-full animate-float transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:translateZ(20px)]"
+                style="animation-delay: -12s"
+              >
+                <div class="absolute bottom-[12%] left-[12%]">
+                  <div
+                    class="w-32 h-20 bg-black/30 backdrop-blur-md border border-white/10 rounded-lg p-2 flex items-center justify-center text-center text-sm font-medium transition-all duration-300 hover:border-violet-accent/80 hover:scale-110 hover:shadow-violet-accent/20 hover:shadow-lg text-violet-accent"
+                  >
+                    Transitions
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="lg:w-1/2 flex flex-col text-center lg:text-left items-center lg:items-start"
+            >
+              <h1
+                class="font-display text-4xl md:text-5xl font-bold uppercase tracking-[0.1em] leading-tight"
+              >
+                LOCK IN YOUR CREATIVE DNA.
+              </h1>
+              <p
+                class="mt-6 text-lg text-white/90 max-w-xl leading-relaxed font-medium"
+              >
+                You define the look. We hard-code it. Your Brand Guide locks in
+                your fonts, colors, pacing, and tone — so every future edit
+                feels perfectly on-brand without you lifting a finger. No
+                micromanaging. No drift. Just your identity, embedded in the
+                system.
+              </p>
+              <div class="mt-10 space-y-6 text-left max-w-xl">
+                <div class="flex items-start gap-4">
+                  <span class="material-symbols-outlined text-cyan-accent mt-1"
+                    >upload_file</span
+                  >
+                  <div>
+                    <h3 class="font-display font-bold text-white">
+                      You Build It. We Lock It.
+                    </h3>
+                    <p class="text-white/70">
+                      Upload your brand assets once — fonts, color palette,
+                      pacing, even vibe. We bake it directly into your account
+                      so every edit stays 100% on-brand.
+                    </p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-4">
+                  <span class="material-symbols-outlined text-cyan-accent mt-1"
+                    >auto_awesome</span
+                  >
+                  <div>
+                    <h3 class="font-display font-bold text-white">
+                      Every Edit, Instantly On-Brand.
+                    </h3>
+                    <p class="text-white/70">
+                      Your style applies automatically to every project. Whether
+                      it’s a YouTube clip, a short, or a long-form edit — the
+                      system already knows what to do.
+                    </p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-4">
+                  <span class="material-symbols-outlined text-cyan-accent mt-1"
+                    >lock_open</span
+                  >
+                  <div>
+                    <h3 class="font-display font-bold text-white">
+                      Freedom Through Consistency.
+                    </h3>
+                    <p class="text-white/70">
+                      You don’t have to repeat yourself. Creators and teams stay
+                      free to create because the brand is already handled.
+                    </p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-4">
+                  <span class="material-symbols-outlined text-cyan-accent mt-1"
+                    >verified_user</span
+                  >
+                  <div>
+                    <h3 class="font-display font-bold text-white">
+                      Enterprise-Level Control. Creator-Simple UX.
+                    </h3>
+                    <p class="text-white/70">
+                      This is the same discipline big agencies use — automated
+                      for creators. One setup gives you the consistency of a
+                      media company, without the overhead.
+                    </p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-4">
+                  <span class="material-symbols-outlined text-cyan-accent mt-1"
+                    >all_inclusive</span
+                  >
+                  <div>
+                    <h3 class="font-display font-bold text-white">
+                      Built for Scale.
+                    </h3>
+                    <p class="text-white/70">
+                      Your Brand Guide syncs across editors, channels, and
+                      content types — instantly. As your content library grows,
+                      your brand stays airtight.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <div
+      class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden"
+    >
+      <div class="halo-background"></div>
+      <div class="layout-container z-10 flex h-full grow flex-col">
+        <div
+          class="px-4 sm:px-8 md:px-20 lg:px-40 flex flex-1 justify-center py-5"
+        >
+          <div
+            class="layout-content-container flex flex-col w-full max-w-7xl flex-1"
+          >
+            <main class="flex-1">
+              <div
+                class="flex flex-wrap justify-center text-center gap-6 py-16 sm:py-24"
+              >
+                <div class="flex max-w-4xl flex-col gap-6 items-center">
+                  <h1
+                    class="text-4xl sm:text-5xl md:text-6xl font-black leading-tight tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-white to-gray-400"
+                  >
+                    Your Editing Team.<br />Not a Freelancer.
+                  </h1>
+                  <p
+                    class="max-w-3xl text-gray-400 text-base sm:text-lg font-normal leading-relaxed"
+                  >
+                    Scaling on YouTube requires consistency, clarity, and a team
+                    you can rely on. You get a dedicated editor in the Americas,
+                    locked-in brand standards, and fast, predictable delivery —
+                    every month.
+                  </p>
+                </div>
+              </div>
+              <div
+                class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-4"
+              >
+                <div
+                  class="glass-tile group relative flex flex-1 flex-col gap-4 overflow-hidden rounded-xl border border-white/10 bg-black/30 p-6 backdrop-blur-lg"
+                >
+                  <div
+                    class="absolute inset-0 grid-bg-pattern opacity-50"
+                  ></div>
+                  <div class="relative flex flex-col gap-4">
+                    <div class="text-[#06f9f9]">
+                      <svg
+                        class="feather feather-sliders"
+                        fill="none"
+                        height="32"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="1.5"
+                        viewBox="0 0 24 24"
+                        width="32"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <line x1="4" x2="4" y1="21" y2="14"></line>
+                        <line x1="4" x2="4" y1="10" y2="3"></line>
+                        <line x1="12" x2="12" y1="21" y2="12"></line>
+                        <line x1="12" x2="12" y1="8" y2="3"></line>
+                        <line x1="20" x2="20" y1="21" y2="16"></line>
+                        <line x1="20" x2="20" y1="12" y2="3"></line>
+                        <line x1="1" x2="7" y1="14" y2="14"></line>
+                        <line x1="9" x2="15" y1="8" y2="8"></line>
+                        <line x1="17" x2="23" y1="16" y2="16"></line>
+                      </svg>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                      <h2 class="text-lg font-bold leading-tight text-white">
+                        Creator Studio Consistency
+                      </h2>
+                      <p
+                        class="text-sm font-normal leading-normal text-gray-400"
+                      >
+                        Your dedicated editor knows your style — pacing, tone,
+                        color, and feel — and keeps every cut perfectly aligned.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="glass-tile group relative flex flex-1 flex-col gap-4 overflow-hidden rounded-xl border border-white/10 bg-black/30 p-6 backdrop-blur-lg"
+                >
+                  <div
+                    class="absolute inset-0 grid-bg-pattern opacity-50"
+                  ></div>
+                  <div class="relative flex flex-col gap-4">
+                    <div class="text-[#06f9f9]">
+                      <svg
+                        class="feather feather-zap"
+                        fill="none"
+                        height="32"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="1.5"
+                        viewBox="0 0 24 24"
+                        width="32"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <polygon
+                          points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"
+                        ></polygon>
+                      </svg>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                      <h2 class="text-lg font-bold leading-tight text-white">
+                        Channel Growth Velocity
+                      </h2>
+                      <p
+                        class="text-sm font-normal leading-normal text-gray-400"
+                      >
+                        Our team keeps your editing pipeline moving —
+                        predictable, fast, and frustration-free.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="glass-tile group relative flex flex-1 flex-col gap-4 overflow-hidden rounded-xl border border-white/10 bg-black/30 p-6 backdrop-blur-lg"
+                >
+                  <div
+                    class="absolute inset-0 grid-bg-pattern opacity-50"
+                  ></div>
+                  <div class="relative flex flex-col gap-4">
+                    <div class="text-[#06f9f9]">
+                      <svg
+                        class="feather feather-briefcase"
+                        fill="none"
+                        height="32"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="1.5"
+                        viewBox="0 0 24 24"
+                        width="32"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <rect
+                          height="14"
+                          rx="2"
+                          ry="2"
+                          width="20"
+                          x="2"
+                          y="7"
+                        ></rect>
+                        <path
+                          d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"
+                        ></path>
+                      </svg>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                      <h2 class="text-lg font-bold leading-tight text-white">
+                        Local Brand Production
+                      </h2>
+                      <p
+                        class="text-sm font-normal leading-normal text-gray-400"
+                      >
+                        High-quality, on-brand video for local businesses that
+                        need a premium look without internal staff.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="glass-tile group relative flex flex-1 flex-col gap-4 overflow-hidden rounded-xl border border-white/10 bg-black/30 p-6 backdrop-blur-lg"
+                >
+                  <div
+                    class="absolute inset-0 grid-bg-pattern opacity-50"
+                  ></div>
+                  <div class="relative flex flex-col gap-4">
+                    <div class="text-[#06f9f9]">
+                      <svg
+                        class="feather feather-users"
+                        fill="none"
+                        height="32"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="1.5"
+                        viewBox="0 0 24 24"
+                        width="32"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"
+                        ></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                      </svg>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                      <h2 class="text-lg font-bold leading-tight text-white">
+                        Agency Fulfillment
+                      </h2>
+                      <p
+                        class="text-sm font-normal leading-normal text-gray-400"
+                      >
+                        White-label editing you’re proud to deliver. Scale
+                        clients without hiring, managing, or training creatives.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="glass-tile group relative flex flex-1 flex-col gap-4 overflow-hidden rounded-xl border border-white/10 bg-black/30 p-6 backdrop-blur-lg"
+                >
+                  <div
+                    class="absolute inset-0 grid-bg-pattern opacity-50"
+                  ></div>
+                  <div class="relative flex flex-col gap-4">
+                    <div class="text-[#06f9f9]">
+                      <svg
+                        class="feather feather-trending-up"
+                        fill="none"
+                        height="32"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="1.5"
+                        viewBox="0 0 24 24"
+                        width="32"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <polyline
+                          points="23 6 13.5 15.5 8.5 10.5 1 18"
+                        ></polyline>
+                        <polyline points="17 6 23 6 23 12"></polyline>
+                      </svg>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                      <h2 class="text-lg font-bold leading-tight text-white">
+                        Creator Growth Support
+                      </h2>
+                      <p
+                        class="text-sm font-normal leading-normal text-gray-400"
+                      >
+                        Our editors evolve with your channel — adjusting pacing,
+                        structure, and creative choices as you grow.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="glass-tile group relative flex flex-1 flex-col gap-4 overflow-hidden rounded-xl border border-white/10 bg-black/30 p-6 backdrop-blur-lg"
+                >
+                  <div
+                    class="absolute inset-0 grid-bg-pattern opacity-50"
+                  ></div>
+                  <div class="relative flex flex-col gap-4">
+                    <div class="text-[#06f9f9]">
+                      <svg
+                        class="feather feather-copy"
+                        fill="none"
+                        height="32"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="1.5"
+                        viewBox="0 0 24 24"
+                        width="32"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <rect
+                          height="13"
+                          rx="2"
+                          ry="2"
+                          width="13"
+                          x="9"
+                          y="9"
+                        ></rect>
+                        <path
+                          d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                        ></path>
+                      </svg>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                      <h2 class="text-lg font-bold leading-tight text-white">
+                        Multi-Channel Support
+                      </h2>
+                      <p
+                        class="text-sm font-normal leading-normal text-gray-400"
+                      >
+                        Multiple channels, one team. Unified Brand Guides ensure
+                        everything looks and feels like you.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="flex flex-col items-center justify-end gap-8 px-4 py-16 sm:py-24"
+              >
+                <div class="flex flex-col gap-2 text-center max-w-3xl">
+                  <h2
+                    class="text-2xl sm:text-3xl font-bold leading-tight tracking-tight text-white"
+                  >
+                    Whatever you film, our team finishes it — fast, clean, and
+                    on-brand.
+                  </h2>
+                </div>
+                <div class="flex justify-center mt-4">
+                  <a
+                    href="#pricing_section"
+                    class="group relative flex min-w-[84px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-12 px-6 bg-[#06f9f9] text-black text-base font-bold leading-normal tracking-wide transition-all duration-300 hover:shadow-2xl hover:shadow-[#06f9f9]/50"
+                  >
+                    <span class="truncate">Start Now</span>
+                    <span
+                      class="transition-transform duration-300 group-hover:translate-x-1"
+                      >→</span
+                    >
+                  </a>
+                </div>
+              </div>
+            </main>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="bg-[#0A0F14] text-[#E0E5E9] font-inter antialiased"
+      id="pricing_section"
+    >
+      <div
+        class="relative min-h-screen w-full overflow-hidden bg-gradient-to-b from-[#0A0F14] to-[#101010]"
+      >
+        <div
+          class="absolute inset-x-0 top-1/4 -translate-y-1/2 flex justify-center items-center pointer-events-none"
+        >
+          <div
+            class="w-[700px] h-[700px] bg-cyan-500 rounded-full blur-[200px] cyan-pulse"
+          ></div>
+        </div>
+        <main
+          class="relative z-10 flex flex-col items-center justify-center min-h-screen py-16 md:py-24 px-4 sm:px-6 lg:px-8"
+        >
+          <div class="text-center max-w-4xl mx-auto mb-8 md:mb-12">
+            <h1
+              class="font-satoshi text-4xl sm:text-5xl md:text-6xl font-black tracking-tighter text-white leading-tight"
+            >
+              You Film. We Edit. At Scale.
+            </h1>
+            <p
+              class="mt-8 text-base md:text-lg text-gray-300 max-w-3xl mx-auto font-medium"
+            >
+              Real human editors. Real consistency. Real communication.
+            </p>
+            <p class="mt-2 text-sm text-white/80 font-satoshi">
+              Choose the plan that fits your output.
+            </p>
+          </div>
+          <div
+            class="grid grid-cols-1 lg:grid-cols-3 gap-8 w-full max-w-7xl items-center"
+          >
+            <div
+              class="flex flex-col h-full rounded-2xl glassmorphism p-8 transition-all duration-300 hover:-translate-y-1.5 hover:border-white/20"
+            >
+              <div class="text-center mb-6 pt-2">
+                <div class="text-white">
+                  <p
+                    class="text-[10px] uppercase font-medium tracking-wider text-gray-500"
+                  >
+                    Up to
+                  </p>
+                  <p
+                    class="font-satoshi font-black text-6xl md:text-7xl tracking-tighter"
+                  >
+                    4
+                  </p>
+                  <p class="font-medium text-gray-300 text-base -mt-1">
+                    Edits / Month
+                  </p>
+                </div>
+                <h3
+                  class="font-satoshi text-2xl font-bold tracking-tight text-white mt-4"
+                >
+                  Starter
+                </h3>
+              </div>
+              <div class="flex-grow">
+                <ul class="space-y-3.5 mt-2 text-gray-300 text-sm">
+                  <li class="flex items-start gap-3">
+                    <span class="text-cyan-400 mt-1">•</span
+                    ><span class="flex-1">$700 / month</span>
+                  </li>
+                  <li class="flex items-start gap-3">
+                    <span class="text-cyan-400 mt-1">•</span
+                    ><span class="flex-1"
+                      >Dedicated editor + priority queue</span
+                    >
+                  </li>
+                  <li class="flex items-start gap-3">
+                    <span class="text-cyan-400 mt-1">•</span
+                    ><span class="flex-1">Unlimited revisions</span>
+                  </li>
+                  <li class="flex items-start gap-3">
+                    <span class="text-cyan-400 mt-1">•</span
+                    ><span class="flex-1">Fast sequential turnaround</span>
+                  </li>
+                  <li class="flex items-start gap-3">
+                    <span class="text-cyan-400 mt-1">•</span
+                    ><span class="flex-1">Locked-in Brand Guide</span>
+                  </li>
+                  <li class="flex items-start gap-3">
+                    <span class="text-cyan-400 mt-1">•</span
+                    ><span class="flex-1">Optional AI Brief Builder</span>
+                  </li>
+                  <li class="flex items-start gap-3">
+                    <span class="text-cyan-400 mt-1">•</span
+                    ><span class="flex-1">Editors in the Americas</span>
+                  </li>
+                  <li class="flex items-start gap-3">
+                    <span class="text-cyan-400 mt-1">•</span
+                    ><span class="flex-1">Short-form add-ons available</span>
+                  </li>
+                </ul>
+              </div>
+              <a
+                href="https://buy.stripe.com/3cI00j5lwccY7lXdXjd7q0P"
+                class="mt-8 w-full rounded-lg h-12 px-6 bg-cyan-400 text-black text-sm font-bold tracking-tight hover:bg-white transition-all duration-300 button-glow"
+                style="text-align: center; padding-top: 12px"
+              >
+                Get Started →
+              </a>
+            </div>
+            <div
+              class="relative flex flex-col h-full rounded-2xl glassmorphism p-8 border-2 border-cyan-400 pro-card pro-ripple"
+            >
+              <div class="absolute -top-4 left-1/2 -translate-x-1/2">
+                <div
+                  class="bg-cyan-400 text-black px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider"
+                  style="margin-top: 22px"
+                >
+                  MOST POPULAR
+                </div>
+              </div>
+              <div class="text-center mb-6 pt-2">
+                <div class="text-white">
+                  <p
+                    class="text-[10px] uppercase font-medium tracking-wider text-gray-500"
+                  >
+                    Up to
+                  </p>
+                  <p
+                    class="font-satoshi font-black text-6xl md:text-7xl tracking-tighter"
+                  >
+                    8
+                  </p>
+                  <p class="font-medium text-gray-300 text-base -mt-1">
+                    Edits / Month
+                  </p>
+                </div>
+                <h3
+                  class="font-satoshi text-2xl font-bold tracking-tight text-white mt-4"
+                >
+                  Pro
+                </h3>
+              </div>
+              <div class="flex-grow">
+                <ul class="space-y-3.5 mt-2 text-gray-300 text-sm">
+                  <li class="flex items-start gap-3">
+                    <span class="text-cyan-400 mt-1">•</span
+                    ><span class="flex-1">$1,000 / month</span>
+                  </li>
+                  <li class="flex items-start gap-3">
+                    <span class="text-cyan-400 mt-1">•</span
+                    ><span class="flex-1"
+                      >Dedicated editor + priority queue</span
+                    >
+                  </li>
+                  <li class="flex items-start gap-3">
+                    <span class="text-cyan-400 mt-1">•</span
+                    ><span class="flex-1">Unlimited revisions</span>
+                  </li>
+                  <li class="flex items-start gap-3">
+                    <span class="text-cyan-400 mt-1">•</span
+                    ><span class="flex-1">Fast sequential turnaround</span>
+                  </li>
+                  <li class="flex items-start gap-3">
+                    <span class="text-cyan-400 mt-1">•</span
+                    ><span class="flex-1">Locked-in Brand Guide</span>
+                  </li>
+                  <li class="flex items-start gap-3">
+                    <span class="text-cyan-400 mt-1">•</span
+                    ><span class="flex-1">Optional AI Brief Builder</span>
+                  </li>
+                  <li class="flex items-start gap-3">
+                    <span class="text-cyan-400 mt-1">•</span
+                    ><span class="flex-1">Editors in the Americas</span>
+                  </li>
+                  <li class="flex items-start gap-3">
+                    <span class="text-cyan-400 mt-1">•</span
+                    ><span class="flex-1">Short-form add-ons available</span>
+                  </li>
+                </ul>
+              </div>
+              <a
+                href="https://buy.stripe.com/28E7sL6pA7WIgWxdXjd7q0Q"
+                class="mt-8 w-full rounded-lg h-12 px-6 bg-cyan-400 text-black text-sm font-bold tracking-tight hover:bg-white transition-all duration-300 button-glow"
+                style="text-align: center; padding-top: 12px"
+              >
+                Upgrade to Pro →
+              </a>
+            </div>
+            <div
+              class="flex flex-col h-full rounded-2xl glassmorphism p-8 transition-all duration-300 hover:-translate-y-1.5 hover:border-white/20"
+            >
+              <div class="text-center mb-6 pt-2">
+                <div class="text-white">
+                  <p
+                    class="text-[10px] uppercase font-medium tracking-wider text-gray-500 opacity-0"
+                  >
+                    Up to
+                  </p>
+                  <p
+                    class="font-satoshi font-black text-6xl md:text-7xl tracking-tighter"
+                  >
+                    12+
+                  </p>
+                  <p class="font-medium text-gray-300 text-base -mt-1">
+                    Edits / Month
+                  </p>
+                </div>
+                <h3
+                  class="font-satoshi text-2xl font-bold tracking-tight text-white mt-4"
+                >
+                  Scale
+                </h3>
+              </div>
+              <div class="flex-grow">
+                <ul class="space-y-3.5 mt-2 text-gray-300 text-sm">
+                  <li class="flex items-start gap-3">
+                    <span class="text-cyan-400 mt-1">•</span
+                    ><span class="flex-1">From $1,500 / month</span>
+                  </li>
+                  <li class="flex items-start gap-3">
+                    <span class="text-cyan-400 mt-1">•</span
+                    ><span class="flex-1"
+                      >Dedicated senior editor (team lead) + multi-channel
+                      support</span
+                    >
+                  </li>
+                  <li class="flex items-start gap-3">
+                    <span class="text-cyan-400 mt-1">•</span
+                    ><span class="flex-1">Unlimited revisions</span>
+                  </li>
+                  <li class="flex items-start gap-3">
+                    <span class="text-cyan-400 mt-1">•</span
+                    ><span class="flex-1">Fast sequential turnaround</span>
+                  </li>
+                  <li class="flex items-start gap-3">
+                    <span class="text-cyan-400 mt-1">•</span
+                    ><span class="flex-1">Locked-in Brand Guide</span>
+                  </li>
+                  <li class="flex items-start gap-3">
+                    <span class="text-cyan-400 mt-1">•</span
+                    ><span class="flex-1">Optional AI Brief Builder</span>
+                  </li>
+                  <li class="flex items-start gap-3">
+                    <span class="text-cyan-400 mt-1">•</span
+                    ><span class="flex-1">Editors in the Americas</span>
+                  </li>
+                  <li class="flex items-start gap-3">
+                    <span class="text-cyan-400 mt-1">•</span
+                    ><span class="flex-1">Short-form add-ons available</span>
+                  </li>
+                </ul>
+              </div>
+              <a
+                href="mailto:support@customediting.com"
+                class="mt-8 w-full rounded-lg h-12 px-6 bg-cyan-400 text-black text-sm font-bold tracking-tight hover:bg-white transition-all duration-300 button-glow"
+                style="text-align: center; padding-top: 12px"
+              >
+                Talk to Sales →
+              </a>
+            </div>
+          </div>
+          <p class="mt-8 text-sm text-white/80 text-center">
+            ✨ Limited-time bonus: 15% off CustomThumbnails.com plans when you
+            subscribe.
+          </p>
+        </main>
+      </div>
+    </div>
+
+    <div class="faq font-display bg-[#0A0A0A] antialiased">
+      <div
+        class="relative flex min-h-screen w-full flex-col items-center justify-center bg-gradient-to-b from-[#0A0A0A] to-[#0F1114] p-4 sm:p-6 md:p-8"
+      >
+        <main class="relative z-10 w-full max-w-4xl px-4">
+          <div class="flex flex-col items-center">
+            <h1
+              class="mb-12 text-center text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl"
+            >
+              Frequently Asked Questions
+            </h1>
+            <div
+              class="relative w-full rounded-20px bg-[#0E1012]/[.96] p-0.5 shadow-[0_0_20px_0_var(--glow-color)] backdrop-blur-[14px]"
+              style="
+                box-shadow: 0 0 20px 0 rgba(0, 255, 255, 0.08),
+                  inset 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+              "
+            >
+              <div class="rounded-[19px]">
+                <div class="flex flex-col">
+                  <details class="group">
+                    <summary
+                      class="flex cursor-pointer list-none items-center justify-between p-6 transition-colors duration-200 hover:bg-white/5"
+                    >
+                      <span class="font-bold text-white/90"
+                        >Do you offer an “unlimited video editing”
+                        package?</span
+                      >
+                      <span
+                        class="icon-wrapper relative h-6 w-6 shrink-0 transition-all duration-200"
+                      >
+                        <svg
+                          class="icon-plus absolute inset-0"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M12 5V19M5 12H19"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </svg>
+                        <svg
+                          class="icon-minus absolute inset-0"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M5 12H19"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </svg>
+                      </span>
+                    </summary>
+                    <div class="answer-content">
+                      <div class="px-6 pb-6 pt-2 leading-[150%] text-white/70">
+                        <div class="prose prose-sm max-w-none text-white/70">
+                          <p>
+                            No — and intentionally. No one can truly deliver
+                            “unlimited” editing. That term is a marketing trick.
+                            Teams that advertise it still restrict you with:
+                          </p>
+                          <ul class="space-y-1">
+                            <li>One-at-a-time request queues</li>
+                            <li>Slow or inconsistent turnarounds</li>
+                            <li>Vague “fair use” caps</li>
+                            <li>Editors overloaded with too many clients</li>
+                          </ul>
+                          <p>
+                            You don’t get unlimited output — you get chaos and
+                            expectations no team can realistically meet. We take
+                            the opposite approach: clear limits, transparent
+                            output, and a workflow engineered for consistent
+                            quality every single month.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </details>
+                  <div class="h-px w-full bg-white/10"></div>
+                  <details class="group">
+                    <summary
+                      class="flex cursor-pointer list-none items-center justify-between p-6 transition-colors duration-200 hover:bg-white/5"
+                    >
+                      <span class="font-bold text-white/90"
+                        >What do you mean by “Unlimited Revisions”?</span
+                      >
+                      <span
+                        class="icon-wrapper relative h-6 w-6 shrink-0 transition-all duration-200"
+                      >
+                        <svg
+                          class="icon-plus absolute inset-0"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M12 5V19M5 12H19"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </svg>
+                        <svg
+                          class="icon-minus absolute inset-0"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M5 12H19"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </svg>
+                      </span>
+                    </summary>
+                    <div class="answer-content">
+                      <div class="px-6 pb-6 pt-2 leading-[150%] text-white/70">
+                        <p>
+                          Every video you submit gets revised until it’s right —
+                          no caps, no extra fees, no penalties. We perfect one
+                          active project at a time. Once that video is approved,
+                          we immediately begin the next.
+                        </p>
+                      </div>
+                    </div>
+                  </details>
+                  <div class="h-px w-full bg-white/10"></div>
+                  <details class="group">
+                    <summary
+                      class="flex cursor-pointer list-none items-center justify-between p-6 transition-colors duration-200 hover:bg-white/5"
+                    >
+                      <span class="font-bold text-white/90"
+                        >What is Sequential Video Editing?</span
+                      >
+                      <span
+                        class="icon-wrapper relative h-6 w-6 shrink-0 transition-all duration-200"
+                      >
+                        <svg
+                          class="icon-plus absolute inset-0"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M12 5V19M5 12H19"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </svg>
+                        <svg
+                          class="icon-minus absolute inset-0"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M5 12H19"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </svg>
+                      </span>
+                    </summary>
+                    <div class="answer-content">
+                      <div class="px-6 pb-6 pt-2 leading-[150%] text-white/70">
+                        <p>
+                          Submit multiple videos at once — we’ll handle them one
+                          at a time in sequence. You approve one → we start the
+                          next. This keeps quality sharp, communication clean,
+                          and turnaround predictable.
+                        </p>
+                      </div>
+                    </div>
+                  </details>
+                  <div class="h-px w-full bg-white/10"></div>
+                  <details class="group">
+                    <summary
+                      class="flex cursor-pointer list-none items-center justify-between p-6 transition-colors duration-200 hover:bg-white/5"
+                    >
+                      <span class="font-bold text-white/90"
+                        >What is your turnaround time?</span
+                      >
+                      <span
+                        class="icon-wrapper relative h-6 w-6 shrink-0 transition-all duration-200"
+                      >
+                        <svg
+                          class="icon-plus absolute inset-0"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M12 5V19M5 12H19"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </svg>
+                        <svg
+                          class="icon-minus absolute inset-0"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M5 12H19"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </svg>
+                      </span>
+                    </summary>
+                    <div class="answer-content">
+                      <div class="px-6 pb-6 pt-2 leading-[150%] text-white/70">
+                        <p>
+                          Typical turnaround is 2–3 business days once all
+                          assets are received. Operating hours: Monday–Friday,
+                          10am–5pm MT Videos submitted after 10am MT, on
+                          weekends, or major U.S. holidays roll over to the next
+                          business day.
+                        </p>
+                      </div>
+                    </div>
+                  </details>
+                  <div class="h-px w-full bg-white/10"></div>
+                  <details class="group">
+                    <summary
+                      class="flex cursor-pointer list-none items-center justify-between p-6 transition-colors duration-200 hover:bg-white/5"
+                    >
+                      <span class="font-bold text-white/90"
+                        >How do I provide feedback?</span
+                      >
+                      <span
+                        class="icon-wrapper relative h-6 w-6 shrink-0 transition-all duration-200"
+                      >
+                        <svg
+                          class="icon-plus absolute inset-0"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M12 5V19M5 12H19"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </svg>
+                        <svg
+                          class="icon-minus absolute inset-0"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M5 12H19"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </svg>
+                      </span>
+                    </summary>
+                    <div class="answer-content">
+                      <div class="px-6 pb-6 pt-2 leading-[150%] text-white/70">
+                        <p>
+                          All communication happens inside your portal — clean,
+                          organized, and trackable.
+                        </p>
+                      </div>
+                    </div>
+                  </details>
+                  <div class="h-px w-full bg-white/10"></div>
+                  <details class="group">
+                    <summary
+                      class="flex cursor-pointer list-none items-center justify-between p-6 transition-colors duration-200 hover:bg-white/5"
+                    >
+                      <span class="font-bold text-white/90"
+                        >Do you offer stock video or audio?</span
+                      >
+                      <span
+                        class="icon-wrapper relative h-6 w-6 shrink-0 transition-all duration-200"
+                      >
+                        <svg
+                          class="icon-plus absolute inset-0"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M12 5V19M5 12H19"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </svg>
+                        <svg
+                          class="icon-minus absolute inset-0"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M5 12H19"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </svg>
+                      </span>
+                    </summary>
+                    <div class="answer-content">
+                      <div class="px-6 pb-6 pt-2 leading-[150%] text-white/70">
+                        <p>
+                          Yes. High-quality, royalty-free stock is included.
+                          Stock is capped at 20% of the final edit to keep your
+                          content authentic.
+                        </p>
+                      </div>
+                    </div>
+                  </details>
+                  <div class="h-px w-full bg-white/10"></div>
+                  <details class="group">
+                    <summary
+                      class="flex cursor-pointer list-none items-center justify-between p-6 transition-colors duration-200 hover:bg-white/5"
+                    >
+                      <span class="font-bold text-white/90"
+                        >Do you offer lower thirds or transitions?</span
+                      >
+                      <span
+                        class="icon-wrapper relative h-6 w-6 shrink-0 transition-all duration-200"
+                      >
+                        <svg
+                          class="icon-plus absolute inset-0"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M12 5V19M5 12H19"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </svg>
+                        <svg
+                          class="icon-minus absolute inset-0"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M5 12H19"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </svg>
+                      </span>
+                    </summary>
+                    <div class="answer-content">
+                      <div class="px-6 pb-6 pt-2 leading-[150%] text-white/70">
+                        <p>
+                          Absolutely. Modern, customizable lower thirds and
+                          transitions are available by request.
+                        </p>
+                      </div>
+                    </div>
+                  </details>
+                  <div class="h-px w-full bg-white/10"></div>
+                  <details class="group">
+                    <summary
+                      class="flex cursor-pointer list-none items-center justify-between p-6 transition-colors duration-200 hover:bg-white/5"
+                    >
+                      <span class="font-bold text-white/90"
+                        >Do you offer animations?</span
+                      >
+                      <span
+                        class="icon-wrapper relative h-6 w-6 shrink-0 transition-all duration-200"
+                      >
+                        <svg
+                          class="icon-plus absolute inset-0"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M12 5V19M5 12H19"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </svg>
+                        <svg
+                          class="icon-minus absolute inset-0"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M5 12H19"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </svg>
+                      </span>
+                    </summary>
+                    <div class="answer-content">
+                      <div class="px-6 pb-6 pt-2 leading-[150%] text-white/70">
+                        <p>
+                          Yes — custom animations are available on a per-project
+                          basis. Request a quote inside your portal.
+                        </p>
+                      </div>
+                    </div>
+                  </details>
+                  <div class="h-px w-full bg-white/10"></div>
+                  <details class="group">
+                    <summary
+                      class="flex cursor-pointer list-none items-center justify-between p-6 transition-colors duration-200 hover:bg-white/5"
+                    >
+                      <span class="font-bold text-white/90"
+                        >Is there a long-term contract?</span
+                      >
+                      <span
+                        class="icon-wrapper relative h-6 w-6 shrink-0 transition-all duration-200"
+                      >
+                        <svg
+                          class="icon-plus absolute inset-0"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M12 5V19M5 12H19"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </svg>
+                        <svg
+                          class="icon-minus absolute inset-0"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M5 12H19"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </svg>
+                      </span>
+                    </summary>
+                    <div class="answer-content">
+                      <div class="px-6 pb-6 pt-2 leading-[150%] text-white/70">
+                        <p>
+                          No contracts. Month-to-month — just like
+                          CustomThumbnails.com.
+                        </p>
+                      </div>
+                    </div>
+                  </details>
+                  <div class="h-px w-full bg-white/10"></div>
+                  <details class="group">
+                    <summary
+                      class="flex cursor-pointer list-none items-center justify-between p-6 transition-colors duration-200 hover:bg-white/5"
+                    >
+                      <span class="font-bold text-white/90"
+                        >How do I communicate with my editor?</span
+                      >
+                      <span
+                        class="icon-wrapper relative h-6 w-6 shrink-0 transition-all duration-200"
+                      >
+                        <svg
+                          class="icon-plus absolute inset-0"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M12 5V19M5 12H19"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </svg>
+                        <svg
+                          class="icon-minus absolute inset-0"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M5 12H19"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </svg>
+                      </span>
+                    </summary>
+                    <div class="answer-content">
+                      <div class="px-6 pb-6 pt-2 leading-[150%] text-white/70">
+                        <p>
+                          Directly inside your portal. One place. Zero chaos.
+                        </p>
+                      </div>
+                    </div>
+                  </details>
+                  <div class="h-px w-full bg-white/10"></div>
+                  <details class="group">
+                    <summary
+                      class="flex cursor-pointer list-none items-center justify-between p-6 transition-colors duration-200 hover:bg-white/5"
+                    >
+                      <span class="font-bold text-white/90"
+                        >What are your requirements for raw footage?</span
+                      >
+                      <span
+                        class="icon-wrapper relative h-6 w-6 shrink-0 transition-all duration-200"
+                      >
+                        <svg
+                          class="icon-plus absolute inset-0"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M12 5V19M5 12H19"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </svg>
+                        <svg
+                          class="icon-minus absolute inset-0"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M5 12H19"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </svg>
+                      </span>
+                    </summary>
+                    <div class="answer-content">
+                      <div class="px-6 pb-6 pt-2 leading-[150%] text-white/70">
+                        <p>
+                          Raw footage should be 30 minutes or less. If it’s
+                          longer, message us before submitting — we’ll help you
+                          plan the best workflow.
+                        </p>
+                      </div>
+                    </div>
+                  </details>
+                  <div class="h-px w-full bg-white/10"></div>
+                  <details class="group">
+                    <summary
+                      class="flex cursor-pointer list-none items-center justify-between p-6 transition-colors duration-200 hover:bg-white/5"
+                    >
+                      <span class="font-bold text-white/90"
+                        >How long can my final video be?</span
+                      >
+                      <span
+                        class="icon-wrapper relative h-6 w-6 shrink-0 transition-all duration-200"
+                      >
+                        <svg
+                          class="icon-plus absolute inset-0"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M12 5V19M5 12H19"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </svg>
+                        <svg
+                          class="icon-minus absolute inset-0"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M5 12H19"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </svg>
+                      </span>
+                    </summary>
+                    <div class="answer-content">
+                      <div class="px-6 pb-6 pt-2 leading-[150%] text-white/70">
+                        <p>
+                          Final edits can be up to 25 minutes. If you need
+                          longer, contact us beforehand so we can allocate the
+                          appropriate time and resources.
+                        </p>
+                      </div>
+                    </div>
+                  </details>
+                  <div class="h-px w-full bg-white/10"></div>
+                  <details class="group">
+                    <summary
+                      class="flex cursor-pointer list-none items-center justify-between p-6 transition-colors duration-200 hover:bg-white/5"
+                    >
+                      <span class="font-bold text-white/90"
+                        >What types of videos do you edit?</span
+                      >
+                      <span
+                        class="icon-wrapper relative h-6 w-6 shrink-0 transition-all duration-200"
+                      >
+                        <svg
+                          class="icon-plus absolute inset-0"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M12 5V19M5 12H19"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </svg>
+                        <svg
+                          class="icon-minus absolute inset-0"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M5 12H19"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </svg>
+                      </span>
+                    </summary>
+                    <div class="answer-content">
+                      <div class="px-6 pb-6 pt-2 leading-[150%] text-white/70">
+                        <div class="prose prose-sm max-w-none text-white/70">
+                          <p>We don’t edit:</p>
+                          <ul class="space-y-1">
+                            <li>Wedding videos</li>
+                            <li>Explicit content</li>
+                          </ul>
+                          <p>
+                            Beyond that, we’ve handled nearly every creator
+                            format.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </details>
+                  <div class="h-px w-full bg-white/10"></div>
+                  <details class="group">
+                    <summary
+                      class="flex cursor-pointer list-none items-center justify-between p-6 transition-colors duration-200 hover:bg-white/5"
+                    >
+                      <span class="font-bold text-white/90"
+                        >Do you offer voiceovers?</span
+                      >
+                      <span
+                        class="icon-wrapper relative h-6 w-6 shrink-0 transition-all duration-200"
+                      >
+                        <svg
+                          class="icon-plus absolute inset-0"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M12 5V19M5 12H19"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </svg>
+                        <svg
+                          class="icon-minus absolute inset-0"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M5 12H19"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </svg>
+                      </span>
+                    </summary>
+                    <div class="answer-content">
+                      <div class="px-6 pb-6 pt-2 leading-[150%] text-white/70">
+                        <p>
+                          You can provide your own VO, but we don’t currently
+                          offer voiceover services.
+                        </p>
+                      </div>
+                    </div>
+                  </details>
+                  <div class="h-px w-full bg-white/10"></div>
+                  <details class="group">
+                    <summary
+                      class="flex cursor-pointer list-none items-center justify-between p-6 transition-colors duration-200 hover:bg-white/5"
+                    >
+                      <span class="font-bold text-white/90"
+                        >Do you create short-form clips?</span
+                      >
+                      <span
+                        class="icon-wrapper relative h-6 w-6 shrink-0 transition-all duration-200"
+                      >
+                        <svg
+                          class="icon-plus absolute inset-0"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M12 5V19M5 12H19"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </svg>
+                        <svg
+                          class="icon-minus absolute inset-0"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M5 12H19"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </svg>
+                      </span>
+                    </summary>
+                    <div class="answer-content">
+                      <div class="px-6 pb-6 pt-2 leading-[150%] text-white/70">
+                        <p>
+                          Yes — available as an add-on. Every clip is
+                          handcrafted by a real editor (no AI auto-cutting),
+                          optimized for impact and retention.
+                        </p>
+                      </div>
+                    </div>
+                  </details>
+                  <div class="h-px w-full bg-white/10"></div>
+                  <details class="group">
+                    <summary
+                      class="flex cursor-pointer list-none items-center justify-between p-6 transition-colors duration-200 hover:bg-white/5"
+                    >
+                      <span class="font-bold text-white/90"
+                        >Do you offer color correction?</span
+                      >
+                      <span
+                        class="icon-wrapper relative h-6 w-6 shrink-0 transition-all duration-200"
+                      >
+                        <svg
+                          class="icon-plus absolute inset-0"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M12 5V19M5 12H19"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </svg>
+                        <svg
+                          class="icon-minus absolute inset-0"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M5 12H19"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </svg>
+                      </span>
+                    </summary>
+                    <div class="answer-content">
+                      <div class="px-6 pb-6 pt-2 leading-[150%] text-white/70">
+                        <p>
+                          Yes. Basic color correction and grading (exposure,
+                          white balance, tone) is included.
+                        </p>
+                      </div>
+                    </div>
+                  </details>
+                  <div class="h-px w-full bg-white/10"></div>
+                  <details class="group">
+                    <summary
+                      class="flex cursor-pointer list-none items-center justify-between p-6 transition-colors duration-200 hover:bg-white/5"
+                    >
+                      <span class="font-bold text-white/90"
+                        >Do credits roll over?</span
+                      >
+                      <span
+                        class="icon-wrapper relative h-6 w-6 shrink-0 transition-all duration-200"
+                      >
+                        <svg
+                          class="icon-plus absolute inset-0"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M12 5V19M5 12H19"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </svg>
+                        <svg
+                          class="icon-minus absolute inset-0"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M5 12H19"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </svg>
+                      </span>
+                    </summary>
+                    <div class="answer-content">
+                      <div class="px-6 pb-6 pt-2 leading-[150%] text-white/70">
+                        <p>
+                          Credits do not roll over. Example: If your plan
+                          includes 4 edits and you only use 3 before your
+                          billing date, the unused credit expires and your count
+                          resets. This keeps production predictable, ensures you
+                          always work with the same editor each month, and
+                          encourages consistent creation — which is exactly what
+                          helps channels gain momentum on YouTube.
+                        </p>
+                      </div>
+                    </div>
+                  </details>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <div class="bg-background-light dark:bg-background-dark font-display">
+      <div class="relative flex h-auto w-full flex-col overflow-x-hidden">
+        <div class="layout-container flex h-full grow flex-col">
+          <footer class="bg-background-dark text-white/90">
+            <div class="mx-auto max-w-7xl px-8 py-16">
+              <div class="text-center">
+                <p
+                  class="text-base font-normal leading-relaxed text-white/80 md:text-lg"
+                >
+                  CustomEditing.com — Professional YouTube editing for creators
+                  who demand consistency, speed, and brand-perfect videos.
+                </p>
+              </div>
+              <div class="my-12 h-px w-full bg-primary/10"></div>
+              <div
+                class="mx-auto flex max-w-lg justify-between gap-16 md:gap-24"
+              >
+                <div class="text-left">
+                  <h3 class="text-lg font-bold text-white">Product</h3>
+                  <ul class="mt-6 space-y-4">
+                    <li>
+                      <a
+                        class="text-base text-white/80 transition-colors hover:text-primary"
+                        href="#how_to"
+                        >How It Works</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        class="text-base text-white/80 transition-colors hover:text-primary"
+                        href="#pricing_section"
+                        >Pricing</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        class="text-base text-white/80 transition-colors hover:text-primary"
+                        href="https://app.customediting.com/"
+                        >Login</a
+                      >
+                    </li>
+                  </ul>
+                </div>
+                <div class="text-left">
+                  <h3 class="text-lg font-bold text-white">Company</h3>
+                  <ul class="mt-6 space-y-4">
+                    <li>
+                      <a
+                        class="text-base text-white/80 transition-colors hover:text-primary"
+                        href="mailto:support@customediting.com"
+                        >Contact</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        class="text-base text-white/80 transition-colors hover:text-primary"
+                        href="https://docs.google.com/document/d/1lD0D7qFRxdTgQVzxLbFoIiP8oLYHeEV8E229gZWRm88/edit?usp=sharing"
+                        >Terms of Service</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        class="text-base text-white/80 transition-colors hover:text-primary"
+                        href="https://docs.google.com/document/d/1xNT708F4fEUb0pcwTN7ajD4U9DeM6VENOlF4ANOtqiU/edit?usp=sharing"
+                        >Privacy Policy</a
+                      >
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="mt-16 text-center">
+                <p class="text-base text-white/60">
+                  © 2025 CustomEditing.com. All rights reserved.
+                </p>
+              </div>
+            </div>
+          </footer>
+        </div>
+      </div>
+    </div>
+    <!-- ========== All JS Link  -->
+    <script src="assets/js/script.js"></script>
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#00E8FF" /* your final updated primary */,
+              "background-light": "#f5f8f8",
+              "background-dark": "#0C0C0E",
+              graphite: "#151518",
+              "jet-black": "#0C0C0E",
+              "cyan-accent": "#00FFFF",
+              "violet-accent": "#835EFF",
+              "neon-cyan": "#00FFFF",
+            },
+
+            fontFamily: {
+              display: ["Inter", "sans-serif"],
+              body: ["Inter", "sans-serif"],
+            },
+
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "1.25rem",
+              "20px": "20px",
+              full: "9999px",
+            },
+
+            animation: {
+              "pulse-slow":
+                "pulse-slow 6s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+              "pulse-line-1": "pulse-line 6s ease-in-out infinite",
+              "pulse-line-2": "pulse-line 6s ease-in-out infinite 1.2s",
+              "pulse-line-3": "pulse-line 6s ease-in-out infinite 2.4s",
+              "pulse-line-4": "pulse-line 6s ease-in-out infinite 3.6s",
+              "pulse-line-5": "pulse-line 6s ease-in-out infinite 4.8s",
+              float: "float 15s ease-in-out infinite",
+              "subtle-circuit": "subtle-circuit 20s linear infinite",
+              "particle-drift": "particle-drift 60s linear infinite",
+              "network-glow": "network-glow 12s ease-in-out infinite",
+              "pulse-icon": "pulse-icon 8s ease-in-out infinite",
+            },
+
+            keyframes: {
+              "pulse-slow": {
+                "0%, 100%": {
+                  opacity: 1,
+                  transform: "scale(1)",
+                  boxShadow:
+                    "0 0 10px #00FFFF, 0 0 20px #00FFFF, 0 0 30px #00FFFF",
+                },
+                "50%": {
+                  opacity: 0.8,
+                  transform: "scale(1.02)",
+                  boxShadow:
+                    "0 0 20px #00FFFF, 0 0 40px #00FFFF, 0 0 60px #00FFFF",
+                },
+              },
+
+              "pulse-line": {
+                "0%, 20%, 100%": { strokeDashoffset: "1000" },
+                "10%": { strokeDashoffset: "0" },
+              },
+
+              float: {
+                "0%, 100%": { transform: "translateY(0px) rotate(0deg)" },
+                "50%": { transform: "translateY(-15px) rotate(2deg)" },
+              },
+
+              "subtle-circuit": {
+                "0%": { "stroke-dashoffset": "2000" },
+                "100%": { "stroke-dashoffset": "0" },
+              },
+
+              "particle-drift": {
+                "0%": { transform: "translate(0, 0)" },
+                "100%": { transform: "translate(-20px, -50px)" },
+              },
+
+              "network-glow": {
+                "0%, 100%": { opacity: "0.1" },
+                "50%": { opacity: "0.3" },
+              },
+
+              "pulse-icon": {
+                "0%, 100%": { opacity: "0.8", transform: "scale(1)" },
+                "50%": { opacity: "1", transform: "scale(1.05)" },
+              },
+            },
+          },
+        },
+      };
+    </script>
+  </body>
+</html>
